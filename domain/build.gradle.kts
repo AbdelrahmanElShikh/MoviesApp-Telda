@@ -3,11 +3,10 @@ plugins {
     `java-library`
 }
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_1_7
-    targetCompatibility = JavaVersion.VERSION_1_7
-}
 
 dependencies {
     testImplementation(libs.junit)
+    implementation(libs.gson)
+    //javax inject
+    implementation(libs.javax.inject)
 }

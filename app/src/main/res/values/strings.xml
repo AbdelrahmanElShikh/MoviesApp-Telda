@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">MoviesApp</string>
+    <string name="the_request_timed_out">Request Time Out</string>
+    <string name="error_request_time_out_msg">Request Time Out</string>
+    <string name="error_parsing_msg">Parsing Data Error</string>
+    <string name="error_unauthorized_msg">Unauthorized User. invalid api token</string>
+    <string name="error_no_internet_msg">No Internet connection. Please check your internt connection</string>
+    <string name="error_general_error_msh">Unknown Error Happened. Please try again later</string>
 </resources>

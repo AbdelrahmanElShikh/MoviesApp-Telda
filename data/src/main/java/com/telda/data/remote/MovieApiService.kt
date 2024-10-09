@@ -1,5 +1,7 @@
 package com.telda.data.remote
 
+import com.telda.domain.model.Movies
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -9,9 +11,9 @@ import retrofit2.http.Query
  * @Project : com.telda.data.remote
  */
 interface MovieApiService {
-    @GET("movies/get-popular-movies")
-    fun getPopularMovies()
+    @GET("movie/popular")
+    suspend fun getPopularMovies(): Response<Movies>
 
     @GET("search/movie")
-    fun getMovieSearchResult(@Query("query") query: String)
+    suspend fun getMovieSearchResult(@Query("query") query: String): Response<Movies>
 }
