@@ -4,6 +4,7 @@ import com.telda.domain.result.Result
 import com.telda.domain.result.error.DataError
 import retrofit2.HttpException
 import retrofit2.Response
+import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 
 /**
@@ -29,5 +30,9 @@ suspend fun <DATA> responseHandler(apiCall: suspend () -> Response<DATA>): Resul
         }
     } catch (e: UnknownHostException) {
         Result.Error(DataError.NetworkError.NO_INTERNET)
+    } catch (e: SocketTimeoutException) {
+        Result.Error(DataError.NetworkError.REQUEST_TIMEOUT)
+    } catch (e: Exception) {
+        Result.Error(DataError.NetworkError.GENERAL_ERROR)
     }
 }

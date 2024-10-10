@@ -71,9 +71,22 @@ dependencies {
     implementation(libs.navigation.compose)
     implementation(libs.kotlinx.serialization.json)
 
+    //compose lifecycle
+    implementation(libs.androidx.compose.lifecycle)
+
     //hilt
     implementation(libs.hilt.android.core)
     kapt(libs.hilt.compiler)
+
+    //hilt navigation
+    implementation(libs.androidx.hilt.navigation)
+
+
+    //coil
+    implementation(libs.androidx.compose.coil)
+
+    //accompanist (compose helper functions yet not available officially)
+    implementation(libs.google.accompanist)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

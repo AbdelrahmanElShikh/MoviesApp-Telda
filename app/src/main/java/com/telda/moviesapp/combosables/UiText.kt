@@ -1,4 +1,4 @@
-package com.telda.moviesapp
+package com.telda.moviesapp.combosables
 
 import android.content.Context
 import androidx.annotation.StringRes

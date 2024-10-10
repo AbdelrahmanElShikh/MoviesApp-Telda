@@ -1,7 +1,8 @@
-package com.telda.moviesapp
+package com.telda.moviesapp.combosables
 
 import com.telda.domain.result.Result
 import com.telda.domain.result.error.DataError
+import com.telda.moviesapp.R
 
 /**
  * @Author : Abdel-Rahman El-Shikh
