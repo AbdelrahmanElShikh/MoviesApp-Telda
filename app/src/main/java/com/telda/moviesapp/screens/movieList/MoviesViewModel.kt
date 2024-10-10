@@ -22,7 +22,6 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-
 /**
  * @Author : Abdel-Rahman El-Shikh
  * @Date : 09-Oct-24
@@ -70,8 +69,15 @@ class MoviesViewModel @Inject constructor(
         }
     }
 
+    fun handleEvents(event: MovieListUiEvents) {
+        when (event) {
+            is MovieListUiEvents.OnSearchQueryChange -> {
+                onQueryChanged(query = event.newQuery)
+            }
+        }
+    }
 
-    fun onQueryChanged(query: String) {
+    private fun onQueryChanged(query: String) {
         _searchText.value = query
     }
 
@@ -90,6 +96,6 @@ class MoviesViewModel @Inject constructor(
     }
 }
 
-sealed interface NavigationEvent {
-    object NavigateToDetails : NavigationEvent
+sealed interface MovieListUiEvents {
+    data class OnSearchQueryChange(val newQuery: String) : MovieListUiEvents
 }

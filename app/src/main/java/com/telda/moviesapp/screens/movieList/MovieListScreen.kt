@@ -53,7 +53,7 @@ fun MovieListsScreen(navController: NavController) {
                 .wrapContentHeight()
                 .padding(horizontal = 8.dp),
             query = searchText,
-            onQueryChange = { viewModel.onQueryChanged(it) },
+            onQueryChange = { viewModel.handleEvents(MovieListUiEvents.OnSearchQueryChange(it)) },
             onSearch = {},
             placeholder = {
                 Text(text = "Search movies")
