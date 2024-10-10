@@ -2,7 +2,7 @@ package com.telda.domain.model
 
 import com.google.gson.annotations.SerializedName
 
-data class Movie(
+data class MovieOverview(
     val adult: Boolean,
     @SerializedName("backdrop_path") val backdropPath: String,
     @SerializedName("genre_ids") val genreIds: List<Int>,

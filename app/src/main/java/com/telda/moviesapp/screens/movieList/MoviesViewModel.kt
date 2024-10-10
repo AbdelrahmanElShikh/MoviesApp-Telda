@@ -5,7 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.telda.domain.model.Movie
+import com.telda.domain.model.MovieOverview
 import com.telda.domain.result.Result
 import com.telda.domain.usecase.GetMovieSearchResultUseCase
 import com.telda.domain.usecase.GetPopularMoviesUseCase
@@ -35,7 +35,7 @@ class MoviesViewModel @Inject constructor(
     private val getMovieSearchResultUseCase: GetMovieSearchResultUseCase,
     private val getYearFromReleaseDateUseCase: GetYearFromReleaseDateUseCase,
 ) : ViewModel() {
-    var state by mutableStateOf(UiState<Map<String, List<Movie>>>())
+    var state by mutableStateOf(UiState<Map<String, List<MovieOverview>>>())
         private set
 
     private val _searchText = MutableStateFlow("")

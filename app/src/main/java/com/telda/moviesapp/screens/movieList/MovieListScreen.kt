@@ -30,7 +30,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.telda.domain.model.Movie
+import com.telda.domain.model.MovieOverview
 import com.telda.moviesapp.combosables.LoadingWithCircularProgressBarCentered
 import com.telda.moviesapp.screens.ScreenMovieDetails
 import com.telda.moviesapp.uiState.Status
@@ -87,7 +87,7 @@ fun MovieListsScreen(navController: NavController) {
 
 @Composable
 fun MovieListsContent(
-    moviesWithYear: Map<String, List<Movie>>?,
+    moviesWithYear: Map<String, List<MovieOverview>>?,
     navController: NavController
 ) {
     moviesWithYear?.let {
@@ -114,7 +114,7 @@ fun MovieListsContent(
                         Spacer(modifier = Modifier.width(16.dp))
                     }
                     items(movies) { movie ->
-                        MovieItem(movie = movie, onMovieClick = {
+                        MovieItem(movieOverview = movie, onMovieClick = {
                             navController.navigate(ScreenMovieDetails(movieId = movie.id, movieName = movie.title))
                         })
                         Spacer(modifier = Modifier.width(8.dp))
