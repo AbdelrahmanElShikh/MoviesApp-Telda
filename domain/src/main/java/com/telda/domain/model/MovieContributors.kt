@@ -6,7 +6,8 @@ data class MovieContributors(
     val id: Int
 )
 
-abstract class Contributor{
-    abstract val name:String
+abstract class Contributor {
+    abstract val id: Int
+    abstract val name: String
     abstract val profilePath: String
 }
