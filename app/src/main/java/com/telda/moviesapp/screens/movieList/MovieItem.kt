@@ -20,16 +20,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.telda.domain.model.MovieOverview
+import com.telda.data.BuildConfig
+import com.telda.domain.model.Movie
 import com.telda.moviesapp.R
 
 @Composable
-fun MovieItem(movieOverview: MovieOverview, onMovieClick: () -> Unit) {
+fun MovieItem(movie: Movie, onMovieClick: () -> Unit = {}) {
     Card(
         modifier = Modifier.clickable { onMovieClick() },
         shape = RoundedCornerShape(8.dp),
@@ -44,26 +46,27 @@ fun MovieItem(movieOverview: MovieOverview, onMovieClick: () -> Unit) {
 
         ) {
             AsyncImage(
-                model = "https://image.tmdb.org/t/p/w500${movieOverview.posterPath}",
+                model = "${BuildConfig.IMAGE_BASE_URL}${movie.posterPath}",
                 contentDescription = "Movie Poster",
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(250.dp)
                     .clip(shape = RoundedCornerShape(8.dp)),
-                contentScale = ContentScale.Crop
+                contentScale = ContentScale.Crop,
+                error = painterResource(R.drawable.ic_placeholder)
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
             Text(
-                text = movieOverview.title,
+                text = movie.title,
                 style = TextStyle(fontSize = MaterialTheme.typography.titleSmall.fontSize, fontWeight = FontWeight.Bold)
             )
 
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "${stringResource(id = R.string.label_release_date)} ${movieOverview.releaseDate}",
+                text = "${stringResource(id = R.string.label_release_date)} ${movie.releaseDate}",
                 fontSize = MaterialTheme.typography.bodySmall.fontSize
             )
 

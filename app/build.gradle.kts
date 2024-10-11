@@ -5,7 +5,6 @@ plugins {
     alias(libs.plugins.jetbrainsKotlinKapt)
     alias(libs.plugins.daggerHilt)
 }
-
 android {
     namespace = "com.telda.moviesapp"
     compileSdk = 34

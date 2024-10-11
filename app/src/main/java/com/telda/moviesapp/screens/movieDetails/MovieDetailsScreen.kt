@@ -1,12 +1,19 @@
 package com.telda.moviesapp.screens.movieDetails
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -17,7 +24,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.telda.moviesapp.screens.movieDetails.sections.MovieContributorsSection
+import com.telda.moviesapp.screens.movieDetails.sections.MovieDetailsSection
+import com.telda.moviesapp.screens.movieDetails.sections.SimilarMoviesSection
+import com.telda.moviesapp.uiState.Status
 
 /**
  * @Author : Abdel-Rahman El-Shikh
@@ -27,21 +39,34 @@ import androidx.navigation.NavController
 @Composable
 fun MovieDetailsScreen(
     navController: NavController,
-    movieId: Int,
     movieName: String,
 ) {
+    val viewModel: MovieDetailsViewModel = hiltViewModel()
     Scaffold(topBar = {
         MovieDetailsTopBar(navController = navController, title = movieName)
     }) { paddingValues ->
         Column(
-            modifier = Modifier.padding(paddingValues),
-            horizontalAlignment = Alignment.CenterHorizontally
+            modifier = Modifier
+                .fillMaxHeight()
+                .padding(paddingValues)
+                .verticalScroll(rememberScrollState()),
+            horizontalAlignment = Alignment.Start
         ) {
-            Text(text = movieId.toString())
-            Text(text = movieName)
+            if (viewModel.state.movieDetails.uiStatus is Status.Loading ||
+                viewModel.state.similarMovies.uiStatus is Status.Loading ||
+                viewModel.state.contributors.uiStatus is Status.Loading
+            )
+                LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+
+            MovieDetailsSection(movieDetailsState = viewModel.state.movieDetails)
+            Spacer(modifier = Modifier.height(8.dp))
+            SimilarMoviesSection(similarMoviesUiState = viewModel.state.similarMovies)
+            Spacer(modifier = Modifier.height(8.dp))
+            MovieContributorsSection(movieContributors = viewModel.state.popularContributors)
         }
     }
 }
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -63,6 +88,5 @@ fun MovieDetailsTopBar(navController: NavController, title: String) {
                     contentDescription = "Back"
                 )
             }
-
         })
 }

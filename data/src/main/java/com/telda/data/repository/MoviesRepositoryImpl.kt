@@ -2,6 +2,8 @@ package com.telda.data.repository
 
 import com.telda.data.datasource.MoviesRemoteDataSource
 import com.telda.data.resource.error.responseHandler
+import com.telda.domain.model.MovieContributors
+import com.telda.domain.model.MovieDetails
 import com.telda.domain.model.Movies
 import com.telda.domain.repository.MoviesRepository
 import com.telda.domain.result.Result
@@ -22,5 +24,17 @@ class MoviesRepositoryImpl @Inject constructor(
 
     override suspend fun getMovieSearchResult(query: String): Result<Movies, DataError.NetworkError> = responseHandler {
         remoteDataSource.getMovieSearchResult(query = query)
+    }
+
+    override suspend fun getMovieDetailsById(movieId: Int): Result<MovieDetails, DataError.NetworkError> = responseHandler {
+        remoteDataSource.getMovieDetailsById(movieId = movieId)
+    }
+
+    override suspend fun getSimilarMoviesById(movieId: Int): Result<Movies, DataError.NetworkError> = responseHandler {
+        remoteDataSource.getSimilarMoviesById(movieId = movieId)
+    }
+
+    override suspend fun getMovieContributors(movieId: Int): Result<MovieContributors, DataError.NetworkError> = responseHandler {
+        remoteDataSource.getMovieContributors(movieId = movieId)
     }
 }

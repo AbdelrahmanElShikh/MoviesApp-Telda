@@ -24,6 +24,7 @@ android {
         buildFeatures.buildConfig = true
         buildConfigField("String" , "BASE_URL" , apikeyProperties.getProperty("BASE_URL"))
         buildConfigField("String" , "API_TOKEN" , apikeyProperties.getProperty("API_TOKEN"))
+        buildConfigField("String" , "IMAGE_BASE_URL" , apikeyProperties.getProperty("IMAGE_BASE_URL"))
     }
 
     buildTypes {

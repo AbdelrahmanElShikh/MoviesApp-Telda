@@ -33,6 +33,7 @@ suspend fun <DATA> responseHandler(apiCall: suspend () -> Response<DATA>): Resul
     } catch (e: SocketTimeoutException) {
         Result.Error(DataError.NetworkError.REQUEST_TIMEOUT)
     } catch (e: Exception) {
+        e.printStackTrace()
         Result.Error(DataError.NetworkError.GENERAL_ERROR)
     }
 }

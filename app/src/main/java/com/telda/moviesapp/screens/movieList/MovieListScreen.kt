@@ -114,7 +114,7 @@ fun MovieListsContent(
                         Spacer(modifier = Modifier.width(16.dp))
                     }
                     items(movies) { movie ->
-                        MovieItem(movieOverview = movie, onMovieClick = {
+                        MovieItem(movie = movie, onMovieClick = {
                             navController.navigate(ScreenMovieDetails(movieId = movie.id, movieName = movie.title))
                         })
                         Spacer(modifier = Modifier.width(8.dp))

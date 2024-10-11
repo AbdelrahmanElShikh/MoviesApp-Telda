@@ -10,4 +10,9 @@
 
     <!-- LABELS -->
     <string name="label_release_date">Release Date:</string>
+    <string name="label_revenue">Revenue:</string>
+    <string name="label_tag_line">Tag Line:</string>
+    <string name="label_overview">Overview</string>
+    <string name="label_similar_movies">Similar Movies</string>
+    <string name="label_casts">Casts</string>
 </resources>
