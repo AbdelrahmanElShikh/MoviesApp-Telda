@@ -8,7 +8,7 @@ import javax.inject.Inject
  * @Date : 09-Oct-24
  * @Project : com.telda.domain.usecase
  */
-class GetPopularMoviesUseCase @Inject constructor( private val moviesRepository: MoviesRepository) {
+class GetPopularMoviesUseCase @Inject constructor(private val moviesRepository: MoviesRepository) {
 
     suspend operator fun invoke() = moviesRepository.getPopularMovies()
 }

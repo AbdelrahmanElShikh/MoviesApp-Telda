@@ -32,6 +32,9 @@ fun DataError.asUiText(): UiText {
             R.string.error_general_error_msh
         )
 
+        DataError.LocalDbError.DATABASE_ERROR -> UiText.StringResource(
+            R.string.error_database_error
+        )
     }
 }
 

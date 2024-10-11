@@ -13,4 +13,8 @@ sealed interface DataError : Error {
         NO_INTERNET,
         GENERAL_ERROR
     }
+
+    enum class LocalDbError : DataError{
+        DATABASE_ERROR
+    }
 }

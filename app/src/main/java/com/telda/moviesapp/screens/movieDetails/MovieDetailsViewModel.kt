@@ -11,6 +11,8 @@ import com.telda.domain.model.MovieContributors
 import com.telda.domain.model.MovieDetails
 import com.telda.domain.model.Movies
 import com.telda.domain.result.Result
+import com.telda.domain.usecase.AddMovieToWatchListUseCase
+import com.telda.domain.usecase.DeleteMovieFromWatchListUseCase
 import com.telda.domain.usecase.GetMostPopularMovieContributorsUseCase
 import com.telda.domain.usecase.GetMovieContributorsUseCase
 import com.telda.domain.usecase.GetMovieDetailsByIdUseCase
@@ -19,6 +21,7 @@ import com.telda.moviesapp.combosables.asUiText
 import com.telda.moviesapp.uiState.Status
 import com.telda.moviesapp.uiState.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -33,6 +36,8 @@ class MovieDetailsViewModel @Inject constructor(
     private val getSimilarMoviesByIdUseCase: GetSimilarMoviesByIdUseCase,
     private val getMovieContributorsUseCase: GetMovieContributorsUseCase,
     private val getMostPopularMovieContributorsUseCase: GetMostPopularMovieContributorsUseCase,
+    private val addMovieToWatchListUseCase: AddMovieToWatchListUseCase,
+    private val deleteMovieFromWatchListUseCase: DeleteMovieFromWatchListUseCase,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -41,6 +46,8 @@ class MovieDetailsViewModel @Inject constructor(
 
     init {
         val movieId = savedStateHandle["movieId"] ?: 0
+        val inWatchList = savedStateHandle["inWatchList"] ?: false
+        state = state.copy(movieId = movieId, inWatchList = inWatchList)
         getMovieDetails(movieId = movieId)
         getSimilarMovies(movieId = movieId)
         getMovieContributors(movieId = movieId)
@@ -84,6 +91,32 @@ class MovieDetailsViewModel @Inject constructor(
             }
         }
     }
+
+    fun handleEvents(event: MovieDetailsUiEvents) {
+        state = when (event) {
+            is MovieDetailsUiEvents.OnAddMovieToWatchList -> {
+                addMovieToWatchList(movieId = state.movieId ?: 0)
+                state.copy(inWatchList = true)
+            }
+
+            is MovieDetailsUiEvents.OnDeleteMovieToWatchList -> {
+                deleteMovieFromWatchList(movieId = state.movieId ?: 0)
+                state.copy(inWatchList = false)
+            }
+        }
+    }
+
+    private fun addMovieToWatchList(movieId: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            addMovieToWatchListUseCase(movieId)
+        }
+    }
+
+    private fun deleteMovieFromWatchList(movieId: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            deleteMovieFromWatchListUseCase(movieId)
+        }
+    }
 }
 
 data class MovieDetailsState(
@@ -91,4 +124,11 @@ data class MovieDetailsState(
     val similarMovies: UiState<Movies> = UiState(Status.Loading()),
     val contributors: UiState<MovieContributors> = UiState(Status.Loading()),
     val popularContributors: List<Contributor?> = listOf(),
+    val movieId: Int? = null,
+    val inWatchList: Boolean = false
 )
+
+sealed interface MovieDetailsUiEvents {
+    data object OnAddMovieToWatchList : MovieDetailsUiEvents
+    data object OnDeleteMovieToWatchList : MovieDetailsUiEvents
+}

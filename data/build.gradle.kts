@@ -6,15 +6,20 @@ plugins {
     alias(libs.plugins.jetbrainsKotlinAndroid)
     alias(libs.plugins.jetbrainsKotlinKapt)
     alias(libs.plugins.daggerHilt)
+    alias(libs.plugins.androidx.room)
 }
 
 val apikeyPropertiesFile = rootProject.file("apikey.properties")
-val apikeyProperties =  Properties()
+val apikeyProperties = Properties()
 apikeyProperties.load(FileInputStream(apikeyPropertiesFile))
 
 android {
     namespace = "com.telda.data"
     compileSdk = 34
+
+    room {
+        schemaDirectory("$projectDir/schemas")
+    }
 
     defaultConfig {
         minSdk = 24
@@ -22,9 +27,9 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
         buildFeatures.buildConfig = true
-        buildConfigField("String" , "BASE_URL" , apikeyProperties.getProperty("BASE_URL"))
-        buildConfigField("String" , "API_TOKEN" , apikeyProperties.getProperty("API_TOKEN"))
-        buildConfigField("String" , "IMAGE_BASE_URL" , apikeyProperties.getProperty("IMAGE_BASE_URL"))
+        buildConfigField("String", "BASE_URL", apikeyProperties.getProperty("BASE_URL"))
+        buildConfigField("String", "API_TOKEN", apikeyProperties.getProperty("API_TOKEN"))
+        buildConfigField("String", "IMAGE_BASE_URL", apikeyProperties.getProperty("IMAGE_BASE_URL"))
     }
 
     buildTypes {
@@ -60,6 +65,12 @@ dependencies {
     //hilt
     implementation(libs.hilt.android.core)
     kapt(libs.hilt.compiler)
+
+    //room
+    implementation(libs.room.runtime)
+    annotationProcessor(libs.room.compiler)
+    kapt(libs.room.compiler)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

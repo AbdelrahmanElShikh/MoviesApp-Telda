@@ -1,6 +1,7 @@
 package com.telda.data.di
 
-import com.telda.data.datasource.MoviesRemoteDataSource
+import com.telda.data.datasource.local.MoviesLocalDataSource
+import com.telda.data.datasource.remote.MoviesRemoteDataSource
 import com.telda.data.repository.MoviesRepositoryImpl
 import com.telda.domain.repository.MoviesRepository
 import dagger.Module
@@ -20,7 +21,10 @@ class RepositoryModule {
 
     @Singleton
     @Provides
-    fun provideMoviesRepository(remoteDataSource: MoviesRemoteDataSource): MoviesRepository =
-        MoviesRepositoryImpl(remoteDataSource)
+    fun provideMoviesRepository(
+        remoteDataSource: MoviesRemoteDataSource,
+        localDataSource: MoviesLocalDataSource
+    ): MoviesRepository =
+        MoviesRepositoryImpl(remoteDataSource, localDataSource)
 
 }

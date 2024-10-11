@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.telda.domain.model.MovieOverview
 import com.telda.domain.result.Result
+import com.telda.domain.usecase.CombineInWatchListToMovieUseCase
 import com.telda.domain.usecase.GetMovieSearchResultUseCase
 import com.telda.domain.usecase.GetPopularMoviesUseCase
 import com.telda.domain.usecase.GetYearFromReleaseDateUseCase
@@ -14,6 +15,7 @@ import com.telda.moviesapp.combosables.asUiText
 import com.telda.moviesapp.uiState.Status
 import com.telda.moviesapp.uiState.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -34,8 +36,9 @@ class MoviesViewModel @Inject constructor(
     private val getPopularMoviesUseCase: GetPopularMoviesUseCase,
     private val getMovieSearchResultUseCase: GetMovieSearchResultUseCase,
     private val getYearFromReleaseDateUseCase: GetYearFromReleaseDateUseCase,
+    private val combineInWatchListToMovieUseCase: CombineInWatchListToMovieUseCase,
 ) : ViewModel() {
-    var state by mutableStateOf(UiState<Map<String, List<MovieOverview>>>())
+    var state by mutableStateOf(MoviesState())
         private set
 
     private val _searchText = MutableStateFlow("")
@@ -46,24 +49,34 @@ class MoviesViewModel @Inject constructor(
     }
 
     private fun getPopularMovies() {
-        viewModelScope.launch {
-            state = state.copy(uiStatus = Status.Loading())
+        viewModelScope.launch(Dispatchers.IO) {
+            state = state.copy(moviesWithYears = UiState(Status.Loading()))
             state = when (val result = getPopularMoviesUseCase()) {
-                is Result.Error -> state.copy(uiStatus = Status.Error(result.error.asUiText()))
+                is Result.Error -> state.copy(moviesWithYears = UiState(Status.Error(result.error.asUiText())))
                 is Result.Success -> state.copy(
-                    uiStatus = Status.Success(result.data.results.groupBy { getYearFromReleaseDateUseCase(it.releaseDate) })
+                    movies = result.data.results,
+                    moviesWithYears = UiState(Status.Success(combineInWatchListToMovieUseCase(result.data.results).groupBy {
+                        getYearFromReleaseDateUseCase(
+                            it.releaseDate
+                        )
+                    }))
                 )
             }
         }
     }
 
     private fun searchForMoviesByQuery(query: String) {
-        viewModelScope.launch {
-            state = state.copy(uiStatus = Status.Loading())
+        viewModelScope.launch(Dispatchers.IO) {
+            state = state.copy(moviesWithYears = UiState(Status.Loading()))
             state = when (val result = getMovieSearchResultUseCase(query)) {
-                is Result.Error -> state.copy(uiStatus = Status.Error(result.error.asUiText()))
+                is Result.Error -> state.copy(moviesWithYears = UiState(Status.Error(result.error.asUiText())))
                 is Result.Success -> state.copy(
-                    uiStatus = Status.Success(result.data.results.groupBy { getYearFromReleaseDateUseCase(it.releaseDate) })
+                    movies = result.data.results,
+                    moviesWithYears = UiState(Status.Success(combineInWatchListToMovieUseCase(result.data.results).groupBy {
+                        getYearFromReleaseDateUseCase(
+                            it.releaseDate
+                        )
+                    }))
                 )
             }
         }
@@ -75,6 +88,19 @@ class MoviesViewModel @Inject constructor(
                 onQueryChanged(query = event.newQuery)
             }
         }
+    }
+
+    fun refreshState() {
+        viewModelScope.launch(Dispatchers.IO) {
+            state = state.copy(
+                moviesWithYears = UiState(Status.Success(combineInWatchListToMovieUseCase(state.movies).groupBy {
+                    getYearFromReleaseDateUseCase(
+                        it.releaseDate
+                    )
+                }))
+            )
+        }
+
     }
 
     private fun onQueryChanged(query: String) {
@@ -95,6 +121,12 @@ class MoviesViewModel @Inject constructor(
         }
     }
 }
+
+data class MoviesState(
+    val movies: List<MovieOverview> = emptyList(),
+    val moviesWithYears: UiState<Map<String, List<MovieOverview>>> = UiState(Status.Loading())
+
+)
 
 sealed interface MovieListUiEvents {
     data class OnSearchQueryChange(val newQuery: String) : MovieListUiEvents

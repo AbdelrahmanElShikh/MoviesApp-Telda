@@ -1,4 +1,4 @@
-package com.telda.data.datasource
+package com.telda.data.datasource.remote
 
 import com.telda.data.remote.MovieApiService
 import com.telda.domain.model.MovieContributors

@@ -33,7 +33,7 @@ fun MoviesAppContent() {
 
                 composable<ScreenMovieDetails> {
                     val args = it.toRoute<ScreenMovieDetails>()
-                    MovieDetailsScreen(navController = navController, movieName = args.movieName)
+                    MovieDetailsScreen(navController = navController, movieName = args.movieName,)
                 }
             }
         }

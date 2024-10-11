@@ -29,6 +29,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.navigation.NavController
 import com.telda.domain.model.MovieOverview
 import com.telda.moviesapp.combosables.LoadingWithCircularProgressBarCentered
@@ -45,6 +46,12 @@ import com.telda.moviesapp.uiState.Status
 fun MovieListsScreen(navController: NavController) {
     val viewModel: MoviesViewModel = hiltViewModel()
     val searchText by viewModel.searchText.collectAsState()
+
+    LifecycleResumeEffect(key1 = viewModel) {
+        if (viewModel.state.moviesWithYears.uiStatus is Status.Success)
+            viewModel.refreshState()
+        onPauseOrDispose { }
+    }
 
     Column {
         SearchBar(
@@ -70,12 +77,12 @@ fun MovieListsScreen(navController: NavController) {
             onActiveChange = {},
             content = {}
         )
-        when (val state = viewModel.state.uiStatus) {
+        when (val state = viewModel.state.moviesWithYears.uiStatus) {
             is Status.Loading -> LoadingWithCircularProgressBarCentered()
             is Status.Success -> {
                 MovieListsContent(
                     moviesWithYear = state.data,
-                    navController = navController
+                    navController = navController,
                 )
             }
 
@@ -115,7 +122,13 @@ fun MovieListsContent(
                     }
                     items(movies) { movie ->
                         MovieItem(movie = movie, onMovieClick = {
-                            navController.navigate(ScreenMovieDetails(movieId = movie.id, movieName = movie.title))
+                            navController.navigate(
+                                ScreenMovieDetails(
+                                    movieId = movie.id,
+                                    movieName = movie.title,
+                                    inWatchList = movie.inWatchList,
+                                )
+                            )
                         })
                         Spacer(modifier = Modifier.width(8.dp))
                     }

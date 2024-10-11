@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.twotone.Star
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -19,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -29,6 +32,7 @@ import coil.compose.AsyncImage
 import com.telda.data.BuildConfig
 import com.telda.domain.model.Movie
 import com.telda.moviesapp.R
+import com.telda.moviesapp.combosables.TextWithIcon
 
 @Composable
 fun MovieItem(movie: Movie, onMovieClick: () -> Unit = {}) {
@@ -71,6 +75,15 @@ fun MovieItem(movie: Movie, onMovieClick: () -> Unit = {}) {
             )
 
             Spacer(modifier = Modifier.height(8.dp))
+
+            if (movie.inWatchList) {
+                TextWithIcon(
+                    text = stringResource(id = R.string.label_added_to_watchlist),
+                    icon = Icons.TwoTone.Star,
+                    tint = Color.Yellow
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+            }
         }
     }
 }

@@ -13,4 +13,7 @@ interface MoviesRepository {
     suspend fun getMovieDetailsById(movieId: Int): Result<MovieDetails, DataError.NetworkError>
     suspend fun getSimilarMoviesById(movieId: Int): Result<Movies, DataError.NetworkError>
     suspend fun getMovieContributors(movieId: Int): Result<MovieContributors, DataError.NetworkError>
+    suspend fun getInWatchListMovieIds(): List<Int>
+    suspend fun addMovieToWatchList(movieId: Int)
+    suspend fun deleteMovieFromWatchList(movieId: Int)
 }

@@ -1,4 +1,4 @@
-package com.telda.data.resource.error
+package com.telda.data.resource
 
 import com.telda.domain.result.Result
 import com.telda.domain.result.error.DataError

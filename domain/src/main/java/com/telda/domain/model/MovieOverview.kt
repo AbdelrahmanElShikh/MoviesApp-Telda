@@ -9,6 +9,7 @@ abstract class Movie {
     abstract val posterPath: String
     abstract val releaseDate: String
     abstract val title: String
+    abstract var inWatchList: Boolean
 }
 
 data class MovieOverview(
@@ -18,6 +19,7 @@ data class MovieOverview(
     @SerializedName("poster_path") override val posterPath: String,
     @SerializedName("release_date") override val releaseDate: String,
     override val title: String,
+    override var inWatchList: Boolean = false,
 ) : Movie()
 
 data class MovieDetails(
@@ -30,4 +32,5 @@ data class MovieDetails(
     val tagline: String,
     val revenue: Long,
     @SerializedName("backdrop_path") val backdropPath: String,
-    ) : Movie()
+    override var inWatchList: Boolean = false,
+) : Movie()

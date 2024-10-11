@@ -1,7 +1,8 @@
 package com.telda.data.repository
 
-import com.telda.data.datasource.MoviesRemoteDataSource
-import com.telda.data.resource.error.responseHandler
+import com.telda.data.datasource.local.MoviesLocalDataSource
+import com.telda.data.datasource.remote.MoviesRemoteDataSource
+import com.telda.data.resource.responseHandler
 import com.telda.domain.model.MovieContributors
 import com.telda.domain.model.MovieDetails
 import com.telda.domain.model.Movies
@@ -16,7 +17,8 @@ import javax.inject.Inject
  * @Project : com.telda.data.repository
  */
 class MoviesRepositoryImpl @Inject constructor(
-    private val remoteDataSource: MoviesRemoteDataSource
+    private val remoteDataSource: MoviesRemoteDataSource,
+    private val localDataSource: MoviesLocalDataSource,
 ) : MoviesRepository {
     override suspend fun getPopularMovies(): Result<Movies, DataError.NetworkError> = responseHandler {
         remoteDataSource.getPopularMovies()
@@ -37,4 +39,10 @@ class MoviesRepositoryImpl @Inject constructor(
     override suspend fun getMovieContributors(movieId: Int): Result<MovieContributors, DataError.NetworkError> = responseHandler {
         remoteDataSource.getMovieContributors(movieId = movieId)
     }
+
+    override suspend fun getInWatchListMovieIds(): List<Int> = localDataSource.getMovies()
+
+    override suspend fun addMovieToWatchList(movieId: Int) = localDataSource.addMovie(movieId = movieId)
+
+    override suspend fun deleteMovieFromWatchList(movieId: Int) = localDataSource.deleteMovie(movieId = movieId)
 }

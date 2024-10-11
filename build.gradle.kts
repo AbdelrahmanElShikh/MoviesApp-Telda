@@ -6,4 +6,5 @@ plugins {
     alias(libs.plugins.androidLibrary) apply false
     alias(libs.plugins.jetbrainsKotlinKapt) apply false
     alias(libs.plugins.daggerHilt) apply false
+    alias(libs.plugins.androidx.room) apply false
 }

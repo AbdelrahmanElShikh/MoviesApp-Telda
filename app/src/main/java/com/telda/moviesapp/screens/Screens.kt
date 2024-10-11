@@ -13,5 +13,6 @@ object ScreenMovieSearch
 @Serializable
 data class ScreenMovieDetails(
     val movieId: Int,
-    val movieName:String,
+    val movieName: String,
+    val inWatchList: Boolean,
 )

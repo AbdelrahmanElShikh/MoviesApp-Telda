@@ -1,7 +1,10 @@
 package com.telda.data.di
 
-import com.telda.data.datasource.MoviesRemoteDataSource
-import com.telda.data.datasource.MoviesRemoteDataSourceImpl
+import com.telda.data.datasource.local.MovieDao
+import com.telda.data.datasource.local.MoviesLocalDataSource
+import com.telda.data.datasource.local.MoviesLocalDataSourceImpl
+import com.telda.data.datasource.remote.MoviesRemoteDataSource
+import com.telda.data.datasource.remote.MoviesRemoteDataSourceImpl
 import com.telda.data.remote.MovieApiService
 import dagger.Module
 import dagger.Provides
@@ -22,4 +25,9 @@ class DataSourceModule {
     @Singleton
     fun provideMoviesRemoteDataSource(apiService: MovieApiService): MoviesRemoteDataSource =
         MoviesRemoteDataSourceImpl(apiService)
+
+    @Provides
+    @Singleton
+    fun provideMoviesLocalDataSource(movieDao: MovieDao): MoviesLocalDataSource =
+        MoviesLocalDataSourceImpl(movieDao)
 }
