@@ -18,11 +18,11 @@ import org.junit.Test
 
 class GetMostPopularMovieContributorsUseCaseTest {
 
-    private lateinit var getMostPopularMovieContributorsUseCase: GetMostPopularMovieContributorsUseCase
+    private lateinit var useCase: GetMostPopularMovieContributorsUseCase
 
     @Before
     fun setup() {
-        getMostPopularMovieContributorsUseCase = GetMostPopularMovieContributorsUseCase()
+        useCase = GetMostPopularMovieContributorsUseCase()
     }
 
     private fun createFakeCast(
@@ -89,7 +89,7 @@ class GetMostPopularMovieContributorsUseCaseTest {
         val contributors = createFakeMovieContributors(cast, crew)
 
         // WHEN
-        val result = getMostPopularMovieContributorsUseCase(contributors)
+        val result = useCase(contributors)
 
         // THEN
         assertEquals(7, result.size)
@@ -111,7 +111,7 @@ class GetMostPopularMovieContributorsUseCaseTest {
         val contributors = createFakeMovieContributors(emptyList(), crew)
 
         // WHEN
-        val result = getMostPopularMovieContributorsUseCase(contributors)
+        val result = useCase(contributors)
 
         // THEN
         assertEquals(2, result.size)
@@ -130,7 +130,7 @@ class GetMostPopularMovieContributorsUseCaseTest {
         val contributors = createFakeMovieContributors(cast, emptyList())
 
         // WHEN
-        val result = getMostPopularMovieContributorsUseCase(contributors)
+        val result = useCase(contributors)
 
         // THEN
         assertEquals(2, result.size)
@@ -155,7 +155,7 @@ class GetMostPopularMovieContributorsUseCaseTest {
         val contributors = createFakeMovieContributors(cast, crew)
 
         // WHEN
-        val result = getMostPopularMovieContributorsUseCase(contributors)
+        val result = useCase(contributors)
 
         // THEN
         assertEquals(3, result.size) // Unique contributors
@@ -181,7 +181,7 @@ class GetMostPopularMovieContributorsUseCaseTest {
         val contributors = createFakeMovieContributors(cast, crew)
 
         // WHEN
-        val result = getMostPopularMovieContributorsUseCase(contributors)
+        val result = useCase(contributors)
 
         // THEN
         assertEquals(3, result.size) // Unique contributors

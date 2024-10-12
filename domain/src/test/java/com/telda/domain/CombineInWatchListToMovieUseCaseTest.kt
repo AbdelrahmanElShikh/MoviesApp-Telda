@@ -17,12 +17,12 @@ import org.junit.Test
 class CombineInWatchListToMovieUseCaseTest {
 
     private lateinit var moviesRepository: MoviesRepository
-    private lateinit var combineInWatchListToMovieUseCase: CombineInWatchListToMovieUseCase
+    private lateinit var useCase: CombineInWatchListToMovieUseCase
 
     @Before
     fun setup() {
         moviesRepository = mockk()
-        combineInWatchListToMovieUseCase = CombineInWatchListToMovieUseCase(moviesRepository)
+        useCase = CombineInWatchListToMovieUseCase(moviesRepository)
     }
 
     @Test
@@ -50,7 +50,7 @@ class CombineInWatchListToMovieUseCaseTest {
         coEvery { moviesRepository.getInWatchListMovieIds() } returns watchListIds
 
         // WHEN
-        val result = combineInWatchListToMovieUseCase(movies)
+        val result = useCase(movies)
 
         // THEN
         assert(result[0].inWatchList) // movie1 should be in watchlist
@@ -82,7 +82,7 @@ class CombineInWatchListToMovieUseCaseTest {
         coEvery { moviesRepository.getInWatchListMovieIds() } returns watchListIds
 
         // WHEN
-        val result = combineInWatchListToMovieUseCase(movies)
+        val result = useCase(movies)
 
         // THEN
         assert(result[0].inWatchList.not()) // movie1 should not be in watchlist
