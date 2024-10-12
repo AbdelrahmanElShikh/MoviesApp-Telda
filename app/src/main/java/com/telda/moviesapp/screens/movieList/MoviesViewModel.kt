@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.telda.domain.model.MovieOverview
 import com.telda.domain.result.Result
+import com.telda.domain.result.error.DataError
 import com.telda.domain.usecase.CombineInWatchListToMovieUseCase
 import com.telda.domain.usecase.GetMovieSearchResultUseCase
 import com.telda.domain.usecase.GetPopularMoviesUseCase
@@ -70,14 +71,19 @@ class MoviesViewModel @Inject constructor(
             state = state.copy(moviesWithYears = UiState(Status.Loading()))
             state = when (val result = getMovieSearchResultUseCase(query)) {
                 is Result.Error -> state.copy(moviesWithYears = UiState(Status.Error(result.error.asUiText())))
-                is Result.Success -> state.copy(
-                    movies = result.data.results,
-                    moviesWithYears = UiState(Status.Success(combineInWatchListToMovieUseCase(result.data.results).groupBy {
-                        getYearFromReleaseDateUseCase(
-                            it.releaseDate
+                is Result.Success -> {
+                    if (result.data.results.isNotEmpty())
+                        state.copy(
+                            movies = result.data.results,
+                            moviesWithYears = UiState(Status.Success(combineInWatchListToMovieUseCase(result.data.results).groupBy {
+                                getYearFromReleaseDateUseCase(
+                                    it.releaseDate
+                                )
+                            }))
                         )
-                    }))
-                )
+                    else
+                        state.copy(moviesWithYears = UiState(Status.Error(DataError.NetworkError.NO_MOVIES_AVAILABLE.asUiText())))
+                }
             }
         }
     }

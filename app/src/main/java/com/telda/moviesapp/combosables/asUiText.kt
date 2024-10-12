@@ -35,6 +35,10 @@ fun DataError.asUiText(): UiText {
         DataError.LocalDbError.DATABASE_ERROR -> UiText.StringResource(
             R.string.error_database_error
         )
+
+        DataError.NetworkError.NO_MOVIES_AVAILABLE -> UiText.StringResource(
+            R.string.error_cant_find_results
+        )
     }
 }
 

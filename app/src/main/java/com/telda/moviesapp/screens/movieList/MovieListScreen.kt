@@ -32,6 +32,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.LifecycleResumeEffect
 import androidx.navigation.NavController
 import com.telda.domain.model.MovieOverview
+import com.telda.moviesapp.combosables.ErrorScreen
 import com.telda.moviesapp.combosables.LoadingWithCircularProgressBarCentered
 import com.telda.moviesapp.screens.ScreenMovieDetails
 import com.telda.moviesapp.uiState.Status
@@ -86,7 +87,7 @@ fun MovieListsScreen(navController: NavController) {
                 )
             }
 
-            is Status.Error -> Text(text = state.error.asString())
+            is Status.Error -> ErrorScreen(state.error.asString())
         }
 
     }

@@ -11,6 +11,7 @@ sealed interface DataError : Error {
         PARSING_ERROR,
         INVALID_API_TOKEN,
         NO_INTERNET,
+        NO_MOVIES_AVAILABLE,
         GENERAL_ERROR
     }
 
